@@ -1,9 +1,6 @@
 from django.db import models
 
 # Create your models here.
-
-from django.db import models
-
 class Company(models.Model):
     company_id = models.AutoField(primary_key=True)
     company_name = models.CharField(max_length=255, null=False)
@@ -30,10 +27,18 @@ class IPO(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Upcoming')
     ipo_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     listing_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    listing_gain = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     current_market_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    current_return = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
+    @property
+    def listing_gain(self):
+        if self.ipo_price and self.listing_price:
+            return round(((self.listing_price - self.ipo_price) / self.ipo_price) * 100, 2)
+        return None
+    @property
+    def current_return(self):
+        if self.ipo_price and self.current_market_price:
+            return round(((self.current_market_price - self.ipo_price) / self.ipo_price) * 100, 2)
+        return None
     def __str__(self):
         return f"{self.company.company_name} IPO"
 

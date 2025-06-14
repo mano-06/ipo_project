@@ -7,6 +7,7 @@
     <title>IPO List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/f27335c025.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
@@ -25,13 +26,12 @@
                 <ul class="nav-list-items nav-list-items-right">
                     <li class="nav-list-item"><a href="#">Sign In</a></li>
                     <li class="nav-list-item"><a href="#" class="btn-sign-up">Sign Up Now</a></li>
-                    <li class="nav-list-item burger-menu">&#8801;</li>
+                    <li class="nav-list-item burger-menu"><i class="fa-solid fa-bars"></i></li>
                 </ul>
             </nav>
         </div>
     </header>
-    <div class="container mt-5">
-        <!-- Breadcrumbs section -->
+    <main class="container">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Bluestock</a></li>
@@ -41,22 +41,136 @@
         </nav>
 
         <h1>Upcoming IPO</h1>
+        <p class="subtitle">Stay updated with the latest IPO opportunities</p>
 
-        <ul class="list-group">
+        <div class="ipo-grid">
             {% for ipo in ipos %}
-                <li class="list-group-item">
-                    <h5>{{ ipo.company.company_name }}</h5>
-                    <p>Status: {{ ipo.status }}</p>
-                    <p>Price Band: {{ ipo.price_band }}</p>
-                    <p>Opening Date: {{ ipo.open_date }}</p>
-                    <p>Closing Date: {{ ipo.close_date }}</p>
-                    <p>Issue Size: {{ ipo.issue_size }}</p>
-                    <p>Issue Type: {{ ipo.issue_type }}</p>
-                    <p>Listing Date: {{ ipo.listing_date }}</p>
-                </li>
+                <div class="ipo-card">
+                    <div class="company-header">
+                        <div class="company-logo">
+                            {% if ipo.company.company_logo %}
+                                <img src="{{ ipo.company.company_logo.url }}" alt="{{ ipo.company.company_name }} logo">
+                            {% else %}
+                                {{ ipo.company.company_name|slice:":1" }}
+                            {% endif %}
+                        </div>
+                        <h3 class="company-name">{{ ipo.company.company_name }}</h3>
+                    </div>
+                    <div class="ipo-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Price Band</span>
+                            <span class="detail-value price-band">{{ ipo.price_band }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Issue Size</span>
+                            <span class="detail-value">{{ ipo.issue_size }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Opening Date</span>
+                            <span class="detail-value">{{ ipo.open_date }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Closing Date</span>
+                            <span class="detail-value">{{ ipo.close_date }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Issue Type</span>
+                            <span class="detail-value">{{ ipo.issue_type }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Status</span>
+                            <span class="detail-value status-{{ ipo.status|lower }}">{{ ipo.status }}</span>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
-    </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Trading View</a></li>
+                        <li><a href="#">NSE Holidays</a></li>
+                        <li><a href="#">e-Voting CDSL</a></li>
+                        <li><a href="#">e-Voting NSDL</a></li>
+                        <li><a href="#">Market Timings</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Blogs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Offerings</h4>
+                    <ul>
+                        <li><a href="#">Compare Broker</a></li>
+                        <li><a href="#">Fin Calculators</a></li>
+                        <li><a href="#">IPO</a></li>
+                        <li><a href="#">All Brokers</a></li>
+                        <li><a href="#">Products</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="#">Shark Investor</a></li>
+                        <li><a href="#">Mutual Funds</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                        <li><a href="#">Indian Indices</a></li>
+                        <li><a href="#">Bug Bounty Program</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Policy</h4>
+                    <ul>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                        <li><a href="#">Disclaimer</a></li>
+                        <li><a href="#">Trust & Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-left">
+                    <div class="social-icons">
+                        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                    </div>
+                    <div class="bluestock-info">
+                        <img src="/media/logo/logo.png" alt="Bluestock Logo" class="bluestock-footer-logo">
+                        <p>Bluestock Fintech</p>
+                        <p>Pune, Maharashtra</p>
+                        <p>MSME Registration No:</p>
+                        <p>UDYAM-MH-01-v038001</p>
+                    </div>
+                    <img src="/media/startup_india.png" alt="#startupindia" class="startup-india-logo">
+                </div>
+                <div class="footer-right">
+                    <p class="disclaimer-text">Investment in securities markets are subject to market risks, read all the related documents carefully before investing as prescribed by SEBI. Issued in the interest of the investors.</p>
+                    <p class="contact-text">The users can write to <a href="mailto:hello@bluestock.in">hello@bluestock.in</a> for any app, website related queries. Also you can send IT / Tech related feedback to <a href="mailto:cto@bluestock.in">cto@bluestock.in</a></p>
+                    <p class="disclaimer-text">Disclaimer: We are not a SEBI registered research analyst company. We do not provide any kind of stock recommendations, buy/ sell stock tips, or investment and trading advice. All the stock scripts shown in the Bluestock app, website, all social media handles are for educational purposes only. Before making any investment in the financial market, it is advisable to consult with your financial advisor. Remember that stock markets are subject to market risks.</p>
+                </div>
+            </div>
+            <div class="footer-credits">
+                <p>Bluestock Fintech All Rights Reserved.</p>
+                <p>Made with ❤️ in Pune, Maharashtra</p>
+            </div>
+        </div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
