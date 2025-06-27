@@ -29,35 +29,34 @@ function AdminEditIPO() {
     const [logoPreview, setLogoPreview] = useState(null);
 
     useEffect(() => {
+        const fetchIPOData = async () => {
+            try {
+                const response = await fetch(`/api/ipos/${id}/`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+
+                // Format dates to YYYY-MM-DD for input fields
+                const formattedData = {
+                    ...data,
+                    open_date: data.open_date ? new Date(data.open_date).toISOString().split('T')[0] : '',
+                    close_date: data.close_date ? new Date(data.close_date).toISOString().split('T')[0] : '',
+                    listing_date: data.listing_date ? new Date(data.listing_date).toISOString().split('T')[0] : '',
+                };
+
+                setFormData(formattedData);
+                if (data.logo) {
+                    setLogoPreview(data.logo); // Assuming logo is a URL
+                }
+                setLoading(false);
+            } catch (error) {
+                setError(error.message);
+                setLoading(false);
+            }
+        };
         fetchIPOData();
     }, [id]);
-
-    const fetchIPOData = async () => {
-        try {
-            const response = await fetch(`/api/ipos/${id}/`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-
-            // Format dates to YYYY-MM-DD for input fields
-            const formattedData = {
-                ...data,
-                open_date: data.open_date ? new Date(data.open_date).toISOString().split('T')[0] : '',
-                close_date: data.close_date ? new Date(data.close_date).toISOString().split('T')[0] : '',
-                listing_date: data.listing_date ? new Date(data.listing_date).toISOString().split('T')[0] : '',
-            };
-
-            setFormData(formattedData);
-            if (data.logo) {
-                setLogoPreview(data.logo); // Assuming logo is a URL
-            }
-            setLoading(false);
-        } catch (error) {
-            setError(error.message);
-            setLoading(false);
-        }
-    };
 
     const handleChange = (e) => {
         const { name, value, type, files } = e.target;
