@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import bluestockLogo from '../bluestock_logo.png'; // Assuming you'll add bluestock_logo.png in src
 import startupIndiaLogo from '../startup_india.png'; // Assuming you'll add startup_india.png in src

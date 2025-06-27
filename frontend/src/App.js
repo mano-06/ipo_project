@@ -1,5 +1,4 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -26,7 +25,7 @@ function App() {
             <Route path="/admin/signup" element={<AdminSignup />} />
             <Route path="/admin/forgot-password" element={<AdminForgotPassword />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/ipos/upcoming" element={<AdminIPOList />} />
+            <Route path="/admin/ipos" element={<AdminIPOList />} />
             <Route path="/admin/ipo/register" element={<AdminRegisterIPO />} />
             <Route path="/admin/ipo/edit/:id" element={<AdminEditIPO />} />
           </Routes>

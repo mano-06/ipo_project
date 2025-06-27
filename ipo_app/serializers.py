@@ -26,4 +26,4 @@ class UserSerializer(serializers.ModelSerializer):
 
 class AuthTokenSerializer(serializers.Serializer):
     username = serializers.CharField()
-    password = serializers.CharField() 
+    password = serializers.CharField()

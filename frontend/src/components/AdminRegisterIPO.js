@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
+import AdminSidebar from './AdminSidebar';
 
 function AdminRegisterIPO() {
     const navigate = useNavigate();
@@ -22,13 +23,22 @@ function AdminRegisterIPO() {
     });
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
+    const [logoPreview, setLogoPreview] = useState(null);
 
     const handleChange = (e) => {
         const { name, value, type, files } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: type === 'file' ? files[0] : value
-        }));
+        if (name === 'logo' && files && files[0]) {
+            setLogoPreview(URL.createObjectURL(files[0]));
+            setFormData(prev => ({
+                ...prev,
+                [name]: files[0]
+            }));
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: type === 'file' ? files[0] : value
+            }));
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -90,81 +100,135 @@ function AdminRegisterIPO() {
             setError(err.message);
         }
     };
+
     const handleCancel = () => {
-        navigate('/admin/dashboard');
+        navigate('/admin/ipos');
     }
 
+    const handleDeleteLogo = () => {
+        setLogoPreview(null);
+        setFormData(prev => ({ ...prev, logo: null }));
+        document.getElementById('logo').value = null;
+    };
+
     return (
-        <div className="ipo-form-container">
-            <h2 className="ipo-form-title">Register IPO Details</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="ipo-form-grid">
-                    <div className="ipo-form-group">
-                        <label htmlFor="company_name" className="ipo-form-label">Company Name</label>
-                        <input type="text" className="ipo-form-input" id="company_name" name="company_name" value={formData.company_name} onChange={handleChange} required />
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="logo" className="ipo-form-label">Company Logo</label>
-                        <input type="file" className="ipo-form-input" id="logo" name="logo" onChange={handleChange} accept="image/*" />
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="price_band" className="ipo-form-label">Price Band</label>
-                        <input type="text" className="ipo-form-input" id="price_band" name="price_band" value={formData.price_band} onChange={handleChange} required />
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="open_date" className="ipo-form-label">Open Date</label>
-                        <input type="date" className="ipo-form-input" id="open_date" name="open_date" value={formData.open_date} onChange={handleChange} required />
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="close_date" className="ipo-form-label">Close Date</label>
-                        <input type="date" className="ipo-form-input" id="close_date" name="close_date" value={formData.close_date} onChange={handleChange} required />
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="issue_size" className="ipo-form-label">Issue Size</label>
-                        <input type="text" className="ipo-form-input" id="issue_size" name="issue_size" value={formData.issue_size} onChange={handleChange} required />
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="issue_type" className="ipo-form-label">Issue Type</label>
-                        <input type="text" className="ipo-form-input" id="issue_type" name="issue_type" value={formData.issue_type} onChange={handleChange} required />
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="listing_date" className="ipo-form-label">Listing Date</label>
-                        <input type="date" className="ipo-form-input" id="listing_date" name="listing_date" value={formData.listing_date} onChange={handleChange} />
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="status" className="ipo-form-label">Status</label>
-                        <select className="ipo-form-select" id="status" name="status" value={formData.status} onChange={handleChange} required>
-                            <option value="upcoming">Upcoming</option>
-                            <option value="ongoing">Ongoing</option>
-                            <option value="listed">Listed</option>
-                        </select>
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="ipo_price" className="ipo-form-label">IPO Price</label>
-                        <input type="number" step="0.01" className="ipo-form-input" id="ipo_price" name="ipo_price" value={formData.ipo_price} onChange={handleChange} />
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="listing_price" className="ipo-form-label">Listing Price</label>
-                        <input type="number" step="0.01" className="ipo-form-input" id="listing_price" name="listing_price" value={formData.listing_price} onChange={handleChange} />
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="current_market_price" className="ipo-form-label">Current Market Price</label>
-                        <input type="number" step="0.01" className="ipo-form-input" id="current_market_price" name="current_market_price" value={formData.current_market_price} onChange={handleChange} />
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="rhp_pdf" className="ipo-form-label">RHP PDF</label>
-                        <input type="file" className="ipo-form-input" id="rhp_pdf" name="rhp_pdf" onChange={handleChange} accept=".pdf" />
-                    </div>
-                    <div className="ipo-form-group">
-                        <label htmlFor="drhp_pdf" className="ipo-form-label">DRHP PDF</label>
-                        <input type="file" className="ipo-form-input" id="drhp_pdf" name="drhp_pdf" onChange={handleChange} accept=".pdf" />
+        <div className='Register'>
+            <AdminSidebar />
+            <div className="ipo-admin-main-layout">
+                <div className="ipo-admin-sidebar-tabs">
+                    <div className="ipo-admin-tab active">IPO Information</div>
+                    <div className="ipo-admin-tab">IPO Info</div>
+                </div>
+                <div className="ipo-admin-content">
+                    <div className="ipo-form-card">
+                        <div className="ipo-form-header-row">
+                            <h2 className="ipo-form-title">IPO Information</h2>
+                            <div className="ipo-form-header-actions">
+                                <button className="ipo-form-header-btn" onClick={handleSubmit}>Register</button>
+                                <button className="ipo-form-header-btn cancel" onClick={handleCancel}>Cancel</button>
+                            </div>
+                        </div>
+                        <div className="ipo-form-section">
+                            <div className="ipo-form-section-title">Enter IPO Details</div>
+                            <div className="ipo-logo-upload-row">
+                                <div className="ipo-logo-preview">
+                                    {logoPreview ? (
+                                        <img src={logoPreview} alt="Logo Preview" />
+                                    ) : (
+                                        <div className="ipo-logo-placeholder">Logo</div>
+                                    )}
+                                </div>
+                                <div className="ipo-logo-actions">
+                                    <input type="file" id="logo" name="logo" accept="image/*" onChange={handleChange} style={{ display: 'none' }} />
+                                    <button type="button" className="ipo-logo-upload-btn" onClick={() => document.getElementById('logo').click()}>Upload Logo</button>
+                                    <button type="button" className="ipo-logo-delete-btn" onClick={handleDeleteLogo}>Delete</button>
+                                </div>
+                            </div>
+                            <div className="ipo-form-grid">
+                                <div className="ipo-form-group">
+                                    <label>Company Name</label>
+                                    <input type="text" name="company_name" value={formData.company_name} onChange={handleChange} placeholder="Vodafone Idea" />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>Price Band</label>
+                                    <input type="text" name="price_band" value={formData.price_band} onChange={handleChange} placeholder="Not Issued" />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>Open</label>
+                                    <input type="text" name="open_date" value={formData.open_date} onChange={handleChange} placeholder="Not Issued" />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>Close</label>
+                                    <input type="text" name="close_date" value={formData.close_date} onChange={handleChange} placeholder="Not Issued" />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>Issue Size</label>
+                                    <input type="text" name="issue_size" value={formData.issue_size} onChange={handleChange} placeholder="2300 Cr." />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>Issue Type</label>
+                                    <select name="issue_type" value={formData.issue_type} onChange={handleChange}>
+                                        <option value="">Select</option>
+                                        <option value="book">Book Built</option>
+                                        <option value="fixed">Fixed Price</option>
+                                    </select>
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>LISTING DATE</label>
+                                    <input type="text" name="listing_date" value={formData.listing_date} onChange={handleChange} placeholder="Not Issued" />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>Status</label>
+                                    <select name="status" value={formData.status} onChange={handleChange}>
+                                        <option value="upcoming">Upcoming</option>
+                                        <option value="ongoing">Ongoing</option>
+                                        <option value="listed">Listed</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="ipo-form-section">
+                            <div className="ipo-form-section-title">NEW LISTED IPO DETAILS (WHEN IPO GET LISTED)</div>
+                            <div className="ipo-form-grid">
+                                <div className="ipo-form-group">
+                                    <label>IPO PRICE</label>
+                                    <input type="text" name="ipo_price" value={formData.ipo_price} onChange={handleChange} placeholder="₹ 383" />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>LISTING PRICE</label>
+                                    <input type="text" name="listing_price" value={formData.listing_price} onChange={handleChange} placeholder="₹ 435" />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>LISTING GAIN</label>
+                                    <input type="text" name="listing_gain" value={formData.listing_gain} onChange={handleChange} placeholder="13.58 %" />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>LISTING DATE</label>
+                                    <input type="text" name="listing_date" value={formData.listing_date} onChange={handleChange} placeholder="2024-05-30" />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>CMP</label>
+                                    <input type="text" name="cmp" value={formData.cmp} onChange={handleChange} placeholder="₹410" />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>CURRENT RETURN</label>
+                                    <input type="text" name="current_return" value={formData.current_return} onChange={handleChange} placeholder="7.05 %" />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>RHP</label>
+                                    <input type="text" name="rhp_pdf" value={formData.rhp_pdf} onChange={handleChange} placeholder="Enter RHP PDF Link" />
+                                </div>
+                                <div className="ipo-form-group">
+                                    <label>DRHP</label>
+                                    <input type="text" name="drhp_pdf" value={formData.drhp_pdf} onChange={handleChange} placeholder="Enter DRHP PDF Link" />
+                                </div>
+                            </div>
+                        </div>
+                        {error && <div className="ipo-form-error">{error}</div>}
+                        {success && <div className="ipo-form-success">IPO registered successfully!</div>}
                     </div>
                 </div>
-                {error && <div className="ipo-form-error">{error}</div>}
-                {success && <div className="ipo-form-success">IPO registered successfully!</div>}
-                <button type="submit" className="ipo-form-submit">Register IPO</button>
-                <button onClick={handleCancel} className="ipo-form-cancel">Cancel</button>
-            </form>
+            </div>
         </div>
     );
 }

@@ -1,5 +1,3 @@
-import React from 'react';
-
 function IPOCard({ ipo }) {
     return (
         <div className="card">
@@ -36,8 +34,8 @@ function IPOCard({ ipo }) {
                 </div>
 
                 <div className="pdf-download">
-                    {ipo.rhp_pdf && <a href={ipo.rhp_pdf} target="_blank" rel="noopener noreferrer" className="rhp-button">RHP</a>}
-                    {ipo.drhp_pdf && <a href={ipo.drhp_pdf} target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-secondary ms-2">DRHP</a>}
+                    <a href={ipo.rhp_pdf} target="_blank" rel="noopener noreferrer" className="rhp-button">RHP</a>
+                    <a href={ipo.drhp_pdf} target="_blank" rel="noopener noreferrer" className="drhp-button">DRHP</a>
                 </div>
             </div>
         </div>
